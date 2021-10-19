@@ -1,14 +1,19 @@
 package com.employeeapi.springemployeeapi.model;
+import lombok.Data;
 
-import java.util.Date;
-
+@Data
 public class EmployeeDTO {
 
+	private Integer id;
+	
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	private String name;
-	private String email;
-	private long phone;
-	private String created_by;
-	private Date created_on;
 	public String getName() {
 		return name;
 	}
@@ -33,10 +38,8 @@ public class EmployeeDTO {
 	public void setCreated_by(String created_by) {
 		this.created_by = created_by;
 	}
-	public Date getCreated_on() {
-		return created_on;
-	}
-	public void setCreated_on(Date created_on) {
-		this.created_on = created_on;
-	}
+	private String email;
+	private long phone;
+	private String created_by;
+	
 }

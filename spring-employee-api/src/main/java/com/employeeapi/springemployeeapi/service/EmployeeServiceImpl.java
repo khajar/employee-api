@@ -1,12 +1,15 @@
 package com.employeeapi.springemployeeapi.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.employeeapi.springemployeeapi.customException.BusinessException;
 import com.employeeapi.springemployeeapi.model.Employee;
+import com.employeeapi.springemployeeapi.model.EmployeeDTO;
 import com.employeeapi.springemployeeapi.repository.EmployeeRepository;
 
 @Service
@@ -18,28 +21,44 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<Employee> getAllEmployees()
 	{
+		if(employeeRepository.findAll().isEmpty())
+		{
+			throw new BusinessException("604","list is empty");
+		}
 		
 		return employeeRepository.findAll();
 	}
 	
 	@Override
-	public Employee getEmployee(long id)
+	public Employee getEmployee(Integer id)
 	{
-		Optional<Employee> optional = employeeRepository.findById(id);
-		Employee employee = null;
-		if(optional.isPresent()) {
-			employee = optional.get();
+
+		try {
+		return employeeRepository.findById(id).get();
 		}
-		else {
-			throw new RuntimeException("employee not found");
+		catch(NoSuchElementException e)
+		{
+			throw new BusinessException("604","given employee id  does not exist"+e.getMessage());
 		}
-		return employee;
+		
 	}
+		
 
 	@Override
-	public Employee addEmployee(Employee employee) {
+	public Employee addEmployee(Employee employee)
+	{
+		if(employee.getName().isEmpty()||employee.getName().length()==0)
+		{
+			throw new BusinessException("601","please send proper name,it is blank");
+		}
+		try {
 		employeeRepository.save(employee);
 		return employee;
+		}
+		catch(Exception e)
+		{
+			throw new BusinessException("603","something went wrong in service layer"+e.getMessage());
+		}
 	}
 
 	@Override
@@ -48,9 +67,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employee;
 	}
 	
-	public void deleteEmployee(long id)
+	@Override
+	public void deleteEmployee(Integer id)
 	{
+		try {
 		 employeeRepository.deleteById(id);
-		 
+		
+		}
+		catch(IllegalArgumentException e)
+		{
+			throw new BusinessException("606","givem employee is blank"+e.getMessage());
+		}
+		//employeeRepository.deleteById(id);	 
 	}
+
+
+
+	
 }

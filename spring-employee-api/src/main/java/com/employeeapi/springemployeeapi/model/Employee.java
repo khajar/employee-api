@@ -18,9 +18,9 @@ public class Employee {
 	
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false, nullable = false,insertable = false,unique = true)
-    private Long id;
+    private Integer id;
 	
 	@Column(name="name")
 	private String name;
@@ -49,10 +49,10 @@ public class Employee {
 	public void setCreated_on(Date created_on) {
 		this.created_on = created_on;
 	}
-	public long getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -70,6 +70,8 @@ public class Employee {
 	public long getPhone() {
 		return phone;
 	}
+
+
 	public void setPhone(long phone) {
 		this.phone = phone;
 	}
